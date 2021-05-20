@@ -20,6 +20,7 @@ export const CACHE_PAGES = {
 export const CACHE_ASSETS = {
     edge: {
         maxAgeSeconds: ONE_DAY,
+        forcePrivateCaching: true,
     },
     browser: {
         maxAgeSeconds: 0,

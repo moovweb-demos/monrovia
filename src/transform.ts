@@ -18,10 +18,53 @@ export default function transform(response: Response, request: Request) {
       <script src="/main.js" defer="defer"></script>
     `)
 
-    // your transformations go here
-    // ...
-    // ...
+    $('head').append(`
+      <style>
+        .l0-hidden {
+          display: none;
+        }
+      </style>
+    `)
+
+     // Relativise links
+     $('a[href^="https://www.monrovia.com"]').map((i, el) => {
+      var link = $(el).attr('href') || '';
+      $(el).attr('href', link.replace('https://www.monrovia.com/', '/'));
+    })
+
+    // Fixing CORS image issues by proxing images to Layer0 server
+    $('a[style]').map((i, el) => {
+      var style = $(el).attr('style') || '';
+      var relativizedStyle = style.replace('https://www.monrovia.com', '');
+      var arrayURL = relativizedStyle.match(/background-image:.url\(([^\)]+)/) || '';
+      var url = arrayURL[1]
+
+      $(el).attr('style', relativizedStyle)
+      $(el).append(`<img class="l0-img l0-hidden" src="${url}" />`)
+    })
+
+    $('img[src^="https://www.monrovia.com"]').map((i, el) => {
+      var url = $(el).attr('src') || '';
+      var newUrl = url.replace('https://www.monrovia.com/', '/')
+      $(el).attr('src', newUrl)
+    })
+
+    $('#category-banner-image').map((i, el) => {
+      var style = $('style:contains("mgz-parallax-inner")');
+      var bannerRaw = style.html() || '';
+
+      var relativizedStyle = bannerRaw.replace(/https:\/\/www.monrovia.com/g, '');
+
+      var bannerObject = relativizedStyle.match(/mgz-parallax-inner{background-image:url\('([^']+)/) || '';
+      var url = bannerObject[1]
+
+      $('body').prepend(`<img class="l0-banner l0-hidden" src="${url}" />`)
+      style.html(relativizedStyle)
+
+    })
+
 
     response.body = $.html()
+
   }
 }
