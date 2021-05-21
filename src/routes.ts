@@ -13,11 +13,9 @@ export default new Router()
   .match('/shop.html', shoppingFlowRouteHandler)
   .match('/shop/:path*', shoppingFlowRouteHandler)
 
-
   // PDP page
   .match('/autumn-blaze-maple.html', shoppingFlowRouteHandler)
   .match('/hennie-graafland-star-astilbe.html', shoppingFlowRouteHandler)
-
 
   .match('/media/:path*', ({ cache, proxy }) => {
     cache(CACHE_ASSETS)

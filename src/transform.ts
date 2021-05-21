@@ -26,8 +26,8 @@ export default function transform(response: Response, request: Request) {
       </style>
     `)
 
-     // Relativise links
-     $('a[href^="https://www.monrovia.com"]').map((i, el) => {
+    // Relativise links
+    $('a[href^="https://www.monrovia.com"]').map((i, el) => {
       var link = $(el).attr('href') || '';
       $(el).attr('href', link.replace('https://www.monrovia.com/', '/'));
     })
@@ -63,8 +63,21 @@ export default function transform(response: Response, request: Request) {
 
     })
 
+    $('link[rel="stylesheet"]').map((i, el) => {
+      var url = $(el).attr('href') || '';
+      var newUrl = url.replace('https://www.monrovia.com/', '/')
+      $(el).attr('href', newUrl)
+    })
+
+    $('script[src^="https://www.monrovia.com"]').map((i, el) => {
+      var url = $(el).attr('src') || '';
+      var newUrl = url.replace('https://www.monrovia.com/', '/')
+      $(el).attr('src', newUrl)
+    })
 
     response.body = $.html()
+
+    // https://demos-monrovia-default.layer0.link/media/catalog/product/cache/75c7456819fd9a6ec6a3543519c190b6/r/e/rest_2_9_2959.jpeg
 
   }
 }
